@@ -10,17 +10,19 @@ import {DaysForecastCard} from "./components/days-forecast-card";
 
 function App() {
 
-    const [weatherConditionUS, setWeatherConditionUS] = useState({})
+    const [weatherConditionCurrentLocation, setWeatherConditionCurrentLocation] = useState({})
     const [weatherConditionCanada, setWeatherConditionCanada] = useState({})
     const [weatherConditionUk, setWeatherConditionUk] = useState({})
 
+
   const fetchData = async () => {
     try {
-      const response = await axios.get('https://api.weatherapi.com/v1/forecast.json?q=10001&days=5&lang=fr&key=c8ccfe34e2ca40c1890231243241109')
-      setWeatherConditionUS(response.data)
-      console.log(response.data)
+      const position = await new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject);
+      });
+      const response = await axios.get(`https://api.weatherapi.com/v1/forecast.json?q=${position.coords.latitude}%2C${position.coords.longitude}&days=5&lang=fr&key=c8ccfe34e2ca40c1890231243241109`)
+      setWeatherConditionCurrentLocation(response.data)
     } catch (error) {
-      console.error(error)
     }
   };
   const fetchWeatherUkData = async () => {
@@ -28,7 +30,6 @@ function App() {
       const response = await axios.get('https://api.weatherapi.com/v1/forecast.json?q=SW1&days=1&hour=3&lang=fr&key=c8ccfe34e2ca40c1890231243241109')
       setWeatherConditionUk(response.data)
     } catch (error) {
-      console.error(error)
     }
   };
   const fetchWeatherConditionCanadaData = async () => {
@@ -36,9 +37,9 @@ function App() {
       const response = await axios.get('https://api.weatherapi.com/v1/forecast.json?q=G2J&days=1&hour=3&lang=fr&key=c8ccfe34e2ca40c1890231243241109')
       setWeatherConditionCanada(response.data)
     } catch (error) {
-      console.error(error)
     }
   };
+
 
   useEffect(() => {
      fetchWeatherUkData()
@@ -51,31 +52,31 @@ function App() {
         <div className="text-center text-white p-2 container overflow-y-hidden" style={{ backgroundColor: '#023261'}}>
           <h1 className="">Weather Forecast App</h1>
           <div className="">
-            {weatherConditionUS && (
+            {weatherConditionCurrentLocation && (
                       <WeatherCitiesCard
-                        currentTemp={weatherConditionUS.current?.temp_c}
-                        weatherCondition={weatherConditionUS.current?.condition.text}
-                        weatherIcon={weatherConditionUS.current?.condition.icon}
-                        feelsLike={weatherConditionUS.current?.feelslike_c}
-                        locationRegion={weatherConditionCanada.location?.name}
-                        locationLocalTime={weatherConditionCanada.location?.localtime}
-                        winDrill={weatherConditionCanada.current?.vis_km}
+                        currentTemp={weatherConditionCurrentLocation.current?.temp_c}
+                        weatherCondition={weatherConditionCurrentLocation.current?.condition.text}
+                        weatherIcon={weatherConditionCurrentLocation.current?.condition.icon}
+                        feelsLike={weatherConditionCurrentLocation.current?.feelslike_c}
+                        locationRegion={weatherConditionCurrentLocation.location?.name}
+                        locationLocalTime={weatherConditionCurrentLocation.location?.localtime}
+                        winDrill={weatherConditionCurrentLocation.current?.vis_km}
                         windImage={windImage}
-                        hourForeCastArray={weatherConditionUS.forecast?.forecastday[0].hour}
+                        hourForeCastArray={weatherConditionCurrentLocation.forecast?.forecastday[0].hour}
                       />)}
-            {!weatherConditionUS && <p>Loading forecast data...</p>}
+            {!weatherConditionCurrentLocation && <p>Loading forecast data...</p>}
 
           </div>
           <div className="grid lg:ml-8 lg:mr-8 lg:pr-8 lg:pl-8">
             <div className="lg:col-6 col-12 sm:col-12">
               <h4 className="" style={{textAlign: 'left'}}>Other large cities</h4>
 
-              {weatherConditionUS &&  (
-                <LargeCities countryInitials={weatherConditionUS.location?.country}
-                             cityName={weatherConditionUS.location?.name}
-                             weatherIcon={weatherConditionUS.current?.condition.icon}
-                             temp={weatherConditionUS.current?.temp_c}
-                             weatherCondition={weatherConditionUS.current?.condition.text}/>
+              {weatherConditionCurrentLocation &&  (
+                <LargeCities countryInitials={weatherConditionCurrentLocation.location?.country}
+                             cityName={weatherConditionCurrentLocation.location?.name}
+                             weatherIcon={weatherConditionCurrentLocation.current?.condition.icon}
+                             temp={weatherConditionCurrentLocation.current?.temp_c}
+                             weatherCondition={weatherConditionCurrentLocation.current?.condition.text}/>
               )}
               {weatherConditionCanada && (
                 <LargeCities countryInitials={weatherConditionCanada.location?.country}
@@ -95,7 +96,7 @@ function App() {
             <div className="lg:col-6 col-12 sm:col-12">
               <h4 style={{textAlign: 'left'}}>5-day forecast</h4>
               {
-                weatherConditionUS.forecast?.forecastday.map((forecast) =>
+                weatherConditionCurrentLocation.forecast?.forecastday.map((forecast) =>
                   (
                     <div key={forecast.id}>
                     <DaysForecastCard
@@ -106,7 +107,7 @@ function App() {
                     </div>
                   ))
               }
-              {!weatherConditionUS && <p>Loading forecast data</p>}
+              {!weatherConditionCurrentLocation && <p>Loading forecast data</p>}
             </div>
           </div>
         </div>

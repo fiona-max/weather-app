@@ -12,9 +12,7 @@ export function WeatherCitiesCard({currentTemp, weatherCondition, weatherIcon, f
     return `${hours}:${minutes}`;
   }
 
-
-
-   return (
+  return (
      <div className="grid lg:ml-8 lg:mr-8 lg:pr-8 lg:pl-8">
            <div className="lg:col-6 col-12 sm:col-12">
              <Card style={{ backgroundColor: '#2c556b', color:'white',margin:'0.2rem', borderRadius:'1.1rem'}}>
