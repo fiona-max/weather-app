@@ -17,32 +17,32 @@ function App() {
 
 
 
-  const fetchData = async () => {
-    try {
-      const position = await new Promise((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(resolve, reject);
-      });
-
-      setUserLanguage(navigator.language)
-      const locationUrls = [
-        `https://api.weatherapi.com/v1/forecast.json?q=${position.coords.latitude}%2C${position.coords.longitude}&days=5&lang=${userLanguage}&key=c8ccfe34e2ca40c1890231243241109`,
-        `https://api.weatherapi.com/v1/forecast.json?q=SW1&days=1&hour=3&lang=${userLanguage}&key=c8ccfe34e2ca40c1890231243241109`,
-        `https://api.weatherapi.com/v1/forecast.json?q=G2J&days=1&hour=3&lang=${userLanguage}&key=c8ccfe34e2ca40c1890231243241109`,
-      ];
-
-      const responses = await Promise.all(locationUrls.map(async (url) => axios.get(url)));
-      setWeatherConditionCurrentLocation(responses[0].data);
-      setWeatherConditionUk(responses[1].data);
-      setWeatherConditionCanada(responses[2].data);
-    } catch (error) {
-    }
-  };
 
 
 
   useEffect(() => {
-     fetchData()
-  }, [fetchData, userLanguage])
+    const fetchData = async () => {
+      try {
+        const position = await new Promise((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(resolve, reject);
+        });
+
+        setUserLanguage(navigator.language)
+        const locationUrls = [
+          `https://api.weatherapi.com/v1/forecast.json?q=${position.coords.latitude}%2C${position.coords.longitude}&days=5&lang=${userLanguage}&key=c8ccfe34e2ca40c1890231243241109`,
+          `https://api.weatherapi.com/v1/forecast.json?q=SW1&days=1&hour=3&lang=${userLanguage}&key=c8ccfe34e2ca40c1890231243241109`,
+          `https://api.weatherapi.com/v1/forecast.json?q=G2J&days=1&hour=3&lang=${userLanguage}&key=c8ccfe34e2ca40c1890231243241109`,
+        ];
+
+        const responses = await Promise.all(locationUrls.map(async (url) => axios.get(url)));
+        setWeatherConditionCurrentLocation(responses[0].data);
+        setWeatherConditionUk(responses[1].data);
+        setWeatherConditionCanada(responses[2].data);
+      } catch (error) {
+      }
+    };
+    fetchData()
+  }, [userLanguage])
 
 
     return (
