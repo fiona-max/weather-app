@@ -13,6 +13,8 @@ function App() {
     const [weatherConditionCurrentLocation, setWeatherConditionCurrentLocation] = useState({})
     const [weatherConditionCanada, setWeatherConditionCanada] = useState({})
     const [weatherConditionUk, setWeatherConditionUk] = useState({})
+    const [userLanguage, setUserLanguage] = useState(navigator.language);
+
 
 
   const fetchData = async () => {
@@ -20,21 +22,23 @@ function App() {
       const position = await new Promise((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(resolve, reject);
       });
-      const response = await axios.get(`https://api.weatherapi.com/v1/forecast.json?q=${position.coords.latitude}%2C${position.coords.longitude}&days=5&lang=fr&key=c8ccfe34e2ca40c1890231243241109`)
+
+      setUserLanguage(navigator.language)
+      const response = await axios.get(`https://api.weatherapi.com/v1/forecast.json?q=${position.coords.latitude}%2C${position.coords.longitude}&days=5&lang=${userLanguage}&key=c8ccfe34e2ca40c1890231243241109`)
       setWeatherConditionCurrentLocation(response.data)
     } catch (error) {
     }
   };
   const fetchWeatherUkData = async () => {
     try {
-      const response = await axios.get('https://api.weatherapi.com/v1/forecast.json?q=SW1&days=1&hour=3&lang=fr&key=c8ccfe34e2ca40c1890231243241109')
+      const response = await axios.get(`https://api.weatherapi.com/v1/forecast.json?q=SW1&days=1&hour=3&lang=${userLanguage}&key=c8ccfe34e2ca40c1890231243241109`)
       setWeatherConditionUk(response.data)
     } catch (error) {
     }
   };
   const fetchWeatherConditionCanadaData = async () => {
     try {
-      const response = await axios.get('https://api.weatherapi.com/v1/forecast.json?q=G2J&days=1&hour=3&lang=fr&key=c8ccfe34e2ca40c1890231243241109')
+      const response = await axios.get(`https://api.weatherapi.com/v1/forecast.json?q=G2J&days=1&hour=3&lang=${userLanguage}&key=c8ccfe34e2ca40c1890231243241109`)
       setWeatherConditionCanada(response.data)
     } catch (error) {
     }
