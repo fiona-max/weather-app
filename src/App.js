@@ -42,7 +42,7 @@ function App() {
 
   useEffect(() => {
      fetchData()
-  }, [userLanguage])
+  }, [fetchData, userLanguage])
 
 
     return (
