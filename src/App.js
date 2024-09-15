@@ -13,7 +13,7 @@ function App() {
     const [weatherConditionCurrentLocation, setWeatherConditionCurrentLocation] = useState({})
     const [weatherConditionCanada, setWeatherConditionCanada] = useState({})
     const [weatherConditionUk, setWeatherConditionUk] = useState({})
-    const [userLanguage, setUserLanguage] = useState(navigator.language);
+    const [userLanguage, setUserLanguage] = useState('');
 
 
 
@@ -49,7 +49,7 @@ function App() {
      fetchWeatherUkData()
      fetchData()
      fetchWeatherConditionCanadaData()
-    }, [])
+    }, [fetchData, fetchWeatherConditionCanadaData, fetchWeatherUkData])
 
 
     return (
