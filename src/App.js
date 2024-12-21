@@ -5,7 +5,6 @@ import {WeatherCitiesCard} from "./components/weather-cities-card";
 import {LargeCities} from "./components/large-cities-card";
 import windImage from './components/wind-image.png'
 import {DaysForecastCard} from "./components/days-forecast-card";
-import { ToggleButton } from 'primereact/togglebutton';
 
 
 
@@ -16,7 +15,6 @@ function App() {
     const [weatherConditionCanada, setWeatherConditionCanada] = useState({})
     const [weatherConditionUk, setWeatherConditionUk] = useState({})
     const [userLanguage, setUserLanguage] = useState('');
-    const [checked, setChecked] = useState(false)
 
 
 
@@ -43,11 +41,9 @@ function App() {
         setWeatherConditionCanada(responses[2].data);
       } catch (error) {
       }
-      console.log(checked)
     };
     fetchData()
   }, [userLanguage])
-
 
     return (
         <div className="text-center text-white p-2 container overflow-y-hidden" style={{ backgroundColor: '#023261'}}>
