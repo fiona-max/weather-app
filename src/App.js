@@ -5,6 +5,8 @@ import {WeatherCitiesCard} from "./components/weather-cities-card";
 import {LargeCities} from "./components/large-cities-card";
 import windImage from './components/wind-image.png'
 import {DaysForecastCard} from "./components/days-forecast-card";
+import { ToggleButton } from 'primereact/togglebutton';
+
 
 
 
@@ -14,6 +16,7 @@ function App() {
     const [weatherConditionCanada, setWeatherConditionCanada] = useState({})
     const [weatherConditionUk, setWeatherConditionUk] = useState({})
     const [userLanguage, setUserLanguage] = useState('');
+    const [checked, setChecked] = useState(false)
 
 
 
@@ -29,9 +32,9 @@ function App() {
 
         setUserLanguage(navigator.language)
         const locationUrls = [
-          `https://api.weatherapi.com/v1/forecast.json?q=${position.coords.latitude}%2C${position.coords.longitude}&days=5&lang=${userLanguage}&key=c8ccfe34e2ca40c1890231243241109`,
-          `https://api.weatherapi.com/v1/forecast.json?q=SW1&days=1&hour=3&lang=${userLanguage}&key=c8ccfe34e2ca40c1890231243241109`,
-          `https://api.weatherapi.com/v1/forecast.json?q=G2J&days=1&hour=3&lang=${userLanguage}&key=c8ccfe34e2ca40c1890231243241109`,
+          `https://api.weatherapi.com/v1/forecast.json?q=${position.coords.latitude}%2C${position.coords.longitude}&days=5&lang=${userLanguage}&key=0aca32338b8f40d8b26173848242112`,
+          `https://api.weatherapi.com/v1/forecast.json?q=SW1&days=1&hour=3&lang=${userLanguage}&key=0aca32338b8f40d8b26173848242112`,
+          `https://api.weatherapi.com/v1/forecast.json?q=G2J&days=1&hour=3&lang=${userLanguage}&key=0aca32338b8f40d8b26173848242112`,
         ];
 
         const responses = await Promise.all(locationUrls.map(async (url) => axios.get(url)));
@@ -40,6 +43,7 @@ function App() {
         setWeatherConditionCanada(responses[2].data);
       } catch (error) {
       }
+      console.log(checked)
     };
     fetchData()
   }, [userLanguage])
